@@ -1,0 +1,26 @@
+version: '1'
+services:
+  wordpress:
+    image: custom-wordpress
+    build: .
+    container_name: wp-${PROJECT_NAME}
+    environment:
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${DB_NAME}
+    links:
+      - db:mysql
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./site:/var/www/html
+    restart: always
+  db:
+    image: mariadb
+    container_name: db-wp-${PROJECT_NAME}
+    environment:
+      MYSQL_ROOT_PASSWORD: ${ROOT_DB_PASSWORD}
+    volumes:
+      - ./db:/var/lib/mysql
+    restart: always
